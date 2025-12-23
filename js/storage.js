@@ -458,4 +458,4 @@ class StorageManager {
 }
 
 // Global storage manager instance
-const storageManager = new StorageManager();
+window.storageManager = new StorageManager();

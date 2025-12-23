@@ -12,25 +12,51 @@ class ExamManager {
 
     // Start Micro Exam
     async startMicroExam(microThemeId = 'potenciacion-racionales') {
+        console.log('ExamManager.startMicroExam called with:', microThemeId);
+        
         // Check daily attempts
-        if (!securityManager.checkDailyAttempts('micro')) {
+        if (!window.securityManager.checkDailyAttempts('micro')) {
+            console.log('Daily attempts exceeded');
             this.showAttemptLimitMessage('micro');
             return;
         }
 
+        // Get theme info
+        const themeInfo = MICRO_THEMES_INFO[microThemeId];
+        const themeName = themeInfo ? themeInfo.title : 'Tema desconocido';
+        console.log('Starting exam for theme:', themeName);
+
+        // Update exam header with theme name
+        const examHeader = document.querySelector('#micro-exam .exam-header h2');
+        if (examHeader) {
+            examHeader.textContent = `🔬 Micro Examen: ${themeName}`;
+            console.log('Updated exam header');
+        }
+
         // Initialize exam
         this.examType = 'micro';
-        this.questions = questionGenerator.generateMicroExamQuestions(microThemeId, CONFIG.MICRO_EXAM.QUESTIONS);
+        this.currentMicroTheme = microThemeId;
+        this.questions = window.questionGenerator.generateMicroExamQuestions(microThemeId, CONFIG.MICRO_EXAM.QUESTIONS);
         this.currentQuestionIndex = 0;
         this.userAnswers = [];
         this.startTime = Date.now();
 
+        console.log('Generated questions:', this.questions.length);
+        
+        if (this.questions.length === 0) {
+            console.error('❌ No questions generated!');
+            window.alertSystem.error('Error: No se pudieron generar las preguntas del examen.');
+            return;
+        }
+        
+        console.log('First question sample:', this.questions[0]);
+
         // Activate security
-        securityManager.activateExamMode();
-        securityManager.generateNewSessionKey();
+        window.securityManager.activateExamMode();
+        window.securityManager.generateNewSessionKey();
 
         // Obfuscate answers
-        this.questions = securityManager.obfuscateAnswers(this.questions);
+        this.questions = window.securityManager.obfuscateAnswers(this.questions);
 
         // Update UI
         this.updateExamHeader('micro', CONFIG.MICRO_EXAM.TIME_LIMIT);
@@ -40,6 +66,7 @@ class ExamManager {
         // Update current exam state
         currentExamState = {
             type: 'micro',
+            microTheme: microThemeId,
             questions: this.questions,
             currentQuestion: this.currentQuestionIndex,
             answers: this.userAnswers,
@@ -48,30 +75,65 @@ class ExamManager {
             score: 0,
             isActive: true
         };
+
+        // Show success message
+        window.alertSystem.success(`Examen iniciado: ${themeName}`);
+        console.log('Exam started successfully');
     }
 
     // Start Complete Exam (placeholder)
     async startCompleteExam() {
-        if (!securityManager.checkDailyAttempts('complete')) {
+        console.log('🎯 startCompleteExam called');
+        
+        if (!window.securityManager.checkDailyAttempts('complete')) {
+            console.log('Daily attempts exceeded for complete exam');
             this.showAttemptLimitMessage('complete');
             return;
         }
 
-        // For now, start with micro exam questions
+        // Update exam header
+        const examHeader = document.querySelector('#complete-exam .exam-header h2');
+        if (examHeader) {
+            examHeader.textContent = `🎯 Examen Completo - Todos los Temas`;
+        }
+
+        // For now, start with micro exam questions from both themes
         this.examType = 'complete';
-        this.questions = questionGenerator.generateCompleteExamQuestions();
+        
+        // Generate questions from both available themes
+        const potenciacionQuestions = window.questionGenerator.generateMicroExamQuestions('potenciacion-racionales', 20);
+        const radicacionQuestions = window.questionGenerator.generateMicroExamQuestions('radicacion-racionales', 20);
+        
+        this.questions = [...potenciacionQuestions, ...radicacionQuestions];
+        
+        // Shuffle the combined questions
+        this.questions = window.questionGenerator.shuffleArray(this.questions);
+        
+        console.log('Generated complete exam questions:', this.questions.length);
+        
+        if (this.questions.length === 0) {
+            console.error('❌ No questions generated for complete exam!');
+            window.alertSystem.error('Error: No se pudieron generar las preguntas del examen completo.');
+            return;
+        }
+        
         this.currentQuestionIndex = 0;
         this.userAnswers = [];
         this.startTime = Date.now();
 
-        securityManager.activateExamMode();
-        securityManager.generateNewSessionKey();
-        this.questions = securityManager.obfuscateAnswers(this.questions);
+        // Activate security
+        window.securityManager.activateExamMode();
+        window.securityManager.generateNewSessionKey();
 
+        // Obfuscate answers
+        this.questions = window.securityManager.obfuscateAnswers(this.questions);
+
+        // Update UI
         this.updateExamHeader('complete', CONFIG.COMPLETE_EXAM.TIME_LIMIT);
         this.renderCurrentQuestion();
         this.startTimer(CONFIG.COMPLETE_EXAM.TIME_LIMIT);
 
+        // Update current exam state
         currentExamState = {
             type: 'complete',
             questions: this.questions,
@@ -82,24 +144,28 @@ class ExamManager {
             score: 0,
             isActive: true
         };
+
+        // Show success message
+        window.alertSystem.success(`Examen completo iniciado: ${this.questions.length} preguntas`);
+        console.log('Complete exam started successfully');
     }
 
     // Start Macro Exam (placeholder)
     async startMacroExam(macroThemeId) {
-        if (!securityManager.checkDailyAttempts('macro')) {
+        if (!window.securityManager.checkDailyAttempts('macro')) {
             this.showAttemptLimitMessage('macro');
             return;
         }
 
         this.examType = 'macro';
-        this.questions = questionGenerator.generateMacroExamQuestions(macroThemeId);
+        this.questions = window.questionGenerator.generateMacroExamQuestions(macroThemeId);
         this.currentQuestionIndex = 0;
         this.userAnswers = [];
         this.startTime = Date.now();
 
-        securityManager.activateExamMode();
-        securityManager.generateNewSessionKey();
-        this.questions = securityManager.obfuscateAnswers(this.questions);
+        window.securityManager.activateExamMode();
+        window.securityManager.generateNewSessionKey();
+        this.questions = window.securityManager.obfuscateAnswers(this.questions);
 
         this.updateExamHeader('macro', CONFIG.MACRO_EXAM.TIME_LIMIT);
         this.renderCurrentQuestion();
@@ -134,15 +200,32 @@ class ExamManager {
     }
 
     renderCurrentQuestion() {
+        console.log('🎯 renderCurrentQuestion called');
+        console.log('🎯 Current question index:', this.currentQuestionIndex);
+        console.log('🎯 Total questions:', this.questions.length);
+        
         const contentElement = document.getElementById(`${this.examType === 'complete' ? 'complete' : this.examType === 'macro' ? 'complete' : 'micro'}-exam-content`);
-        if (!contentElement) return;
+        console.log('🎯 Content element found:', !!contentElement);
+        
+        if (!contentElement) {
+            console.error('❌ Content element not found for exam type:', this.examType);
+            return;
+        }
 
         if (this.currentQuestionIndex >= this.questions.length) {
+            console.log('🎯 No more questions, finishing exam');
             this.finishExam();
             return;
         }
 
         const question = this.questions[this.currentQuestionIndex];
+        console.log('🎯 Current question:', question);
+        
+        if (!question) {
+            console.error('❌ Question not found at index:', this.currentQuestionIndex);
+            return;
+        }
+        
         const questionNumber = this.currentQuestionIndex + 1;
 
         let html = `
@@ -154,11 +237,11 @@ class ExamManager {
                 
                 <div class="exam-actions">
                     ${this.currentQuestionIndex > 0 ? 
-                        `<button class="exam-btn secondary" onclick="examManager.previousQuestion()">
+                        `<button class="exam-btn secondary" onclick="window.examManager.previousQuestion()">
                             ← Anterior
                         </button>` : ''
                     }
-                    <button class="exam-btn primary" onclick="examManager.nextQuestion()">
+                    <button class="exam-btn primary" onclick="window.examManager.nextQuestion()">
                         ${this.currentQuestionIndex < this.questions.length - 1 ? 'Siguiente →' : 'Finalizar Examen'}
                     </button>
                 </div>
@@ -174,39 +257,54 @@ class ExamManager {
             </div>
         `;
 
+        console.log('🎯 Setting HTML content...');
         contentElement.innerHTML = html;
+        console.log('🎯 HTML content set successfully');
 
         // Re-render MathJax
-        if (window.MathJax) {
-            MathJax.typesetPromise();
+        console.log('🎯 Attempting to render MathJax...');
+        if (window.app && window.app.renderMathJax) {
+            window.app.renderMathJax().then(() => {
+                console.log('🎯 MathJax rendering completed for question');
+            });
+        } else {
+            console.log('🎯 MathJax rendering not available');
         }
 
         // Update progress
         this.updateProgress();
+        console.log('🎯 Question rendered successfully');
     }
 
     renderQuestionOptions(question) {
+        console.log('🎯 renderQuestionOptions called with:', question.type);
+        
         if (question.type === 'multiple_choice') {
-            return `
+            const optionsHtml = `
                 <div class="options">
                     ${question.options.map((option, index) => `
-                        <div class="option" onclick="examManager.selectOption(${index})" data-option="${index}">
+                        <div class="option" onclick="window.examManager.selectOption(${index})" data-option="${index}">
                             <div class="option-letter">${String.fromCharCode(65 + index)}</div>
                             <div class="option-text">${option}</div>
                         </div>
                     `).join('')}
                 </div>
             `;
+            console.log('🎯 Generated options HTML for multiple choice');
+            return optionsHtml;
         } else if (question.type === 'numerical_input') {
-            return `
+            const numericalHtml = `
                 <div class="numerical-answer">
                     <input type="number" class="numerical-input" id="numerical-answer" 
                            placeholder="Ingresa tu respuesta numérica" 
-                           onchange="examManager.handleNumericalAnswer(this.value)">
+                           onchange="window.examManager.handleNumericalAnswer(this.value)">
                 </div>
             `;
+            console.log('🎯 Generated options HTML for numerical input');
+            return numericalHtml;
         }
         
+        console.log('🎯 Unknown question type, returning empty');
         return '';
     }
 
@@ -244,7 +342,7 @@ class ExamManager {
     nextQuestion() {
         // Check if answer is provided
         if (!this.userAnswers[this.currentQuestionIndex]) {
-            alert('Por favor selecciona una respuesta antes de continuar.');
+            window.alertSystem.warning('Por favor selecciona una respuesta antes de continuar.');
             return;
         }
 
@@ -319,7 +417,7 @@ class ExamManager {
         }
 
         // Deactivate security
-        securityManager.deactivateExamMode();
+        window.securityManager.deactivateExamMode();
 
         // Calculate results
         const results = this.calculateResults();
@@ -340,8 +438,8 @@ class ExamManager {
 
         this.questions.forEach((question, index) => {
             const userAnswer = this.userAnswers[index];
-            const correctAnswer = securityManager.decryptAnswer(question.correctAnswer);
-            const explanation = securityManager.decryptAnswer(question.explanation);
+            const correctAnswer = window.securityManager.decryptAnswer(question.correctAnswer);
+            const explanation = window.securityManager.decryptAnswer(question.explanation);
             
             let isCorrect = false;
             
@@ -391,11 +489,11 @@ class ExamManager {
     async saveExamResults(results) {
         try {
             // Save to IndexedDB
-            await storageManager.saveExamResult(results);
+            await window.storageManager.saveExamResult(results);
             
             // Update micro theme progress if it's a micro exam
             if (this.examType === 'micro') {
-                await storageManager.updateMicroThemeProgress(
+                await window.storageManager.updateMicroThemeProgress(
                     'potenciacion-racionales',
                     'numeros-operaciones',
                     results
@@ -439,15 +537,12 @@ class ExamManager {
                         <div class="score-item-label">Tiempo Utilizado</div>
                     </div>
                     <div class="score-item">
-                        <div class="score-item-value">${securityManager.getRemainingAttempts(this.examType)}</div>
+                        <div class="score-item-value">${window.securityManager.getRemainingAttempts(this.examType)}</div>
                         <div class="score-item-label">Intentos Restantes Hoy</div>
                     </div>
                 </div>
                 
                 <div class="exam-actions">
-                    <button class="exam-btn primary" onclick="examManager.reviewAnswers()">
-                        📋 Revisar Respuestas
-                    </button>
                     <button class="exam-btn secondary" onclick="examManager.startNewExam()">
                         🔄 Nuevo Examen
                     </button>
@@ -462,17 +557,14 @@ class ExamManager {
     }
 
     reviewAnswers() {
-        const contentElement = document.getElementById(`${this.examType === 'complete' ? 'complete' : this.examType === 'macro' ? 'complete' : 'micro'}-exam-content`);
-        if (!contentElement || !this.currentExam) return;
-
-        // This would show a detailed review of all questions and answers
-        // For now, show a simple message
-        alert('Función de revisión de respuestas próximamente disponible.');
+        // Función deshabilitada por seguridad
+        window.alertSystem.warning('Esta función no está disponible para mantener la integridad del examen.');
     }
 
     startNewExam() {
         if (this.examType === 'micro') {
-            this.startMicroExam();
+            // Return to theme selection for micro exams
+            window.app.showSection('micro-exam');
         } else if (this.examType === 'complete') {
             this.startCompleteExam();
         } else if (this.examType === 'macro') {
@@ -481,11 +573,11 @@ class ExamManager {
     }
 
     showAttemptLimitMessage(examType) {
-        const remaining = securityManager.getRemainingAttempts(examType);
+        const remaining = window.securityManager.getRemainingAttempts(examType);
         const examName = examType === 'micro' ? 'Micro Examen' : 
                         examType === 'complete' ? 'Examen Completo' : 'Examen de Macrotema';
         
-        alert(`Has alcanzado el límite diario de intentos para ${examName}. Intentos restantes: ${remaining}`);
+        window.alertSystem.warning(`Has alcanzado el límite diario de intentos para ${examName}. Intentos restantes: ${remaining}`);
     }
 
     // Pause/Resume exam (for focus loss)
@@ -503,4 +595,4 @@ class ExamManager {
 }
 
 // Global exam manager instance
-const examManager = new ExamManager();
+window.examManager = new ExamManager();

@@ -3,12 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beca 18 - Plataforma de Exámenes Matemáticos</title>
+    <meta name="description" content="Plataforma oficial de preparación matemática para Beca 18. Practica con exámenes de números, álgebra, geometría y estadística. Sistema de evaluación profesional y seguro.">
+    <meta name="keywords" content="Beca 18, matemáticas, examen, preparación, números, álgebra, geometría, estadística, educación superior, Perú">
+    <meta name="author" content="Beca 18 - Ministerio de Educación">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://beca18-matematicas.edu.pe/">
+    <meta property="og:title" content="Beca 18 - Plataforma de Preparación Matemática">
+    <meta property="og:description" content="Prepárate para el examen de Beca 18 con nuestra plataforma oficial de matemáticas. Ejercicios, exámenes y evaluaciones profesionales.">
+    <meta property="og:image" content="https://beca18-matematicas.edu.pe/assets/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://beca18-matematicas.edu.pe/">
+    <meta property="twitter:title" content="Beca 18 - Plataforma de Preparación Matemática">
+    <meta property="twitter:description" content="Prepárate para el examen de Beca 18 con nuestra plataforma oficial de matemáticas.">
+    <meta property="twitter:image" content="https://beca18-matematicas.edu.pe/assets/twitter-image.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <title>Beca 18 - Plataforma de Exámenes Matemáticos | Preparación Oficial</title>
+    
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/components.css">
     <link rel="stylesheet" href="styles/security.css">
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="styles/alerts.css">
+    
+    <!-- MathJax -->
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true,
+            processEnvironments: true
+        },
+        startup: {
+            ready: () => {
+                console.log('MathJax is loaded and ready');
+                MathJax.startup.defaultReady();
+            }
+        }
+    };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "EducationalOrganization",
+        "name": "Beca 18 - Plataforma Matemática",
+        "description": "Plataforma oficial de preparación matemática para el programa Beca 18",
+        "url": "https://beca18-matematicas.edu.pe",
+        "logo": "https://beca18-matematicas.edu.pe/assets/logo.png",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+51-1-615-5800",
+            "contactType": "customer service"
+        }
+    }
+    </script>
 </head>
 <body>
     <div id="app" class="app-container">
@@ -72,8 +134,9 @@
                         <h2>🔬 Micro Examen</h2>
                         <p>Práctica enfocada en microtemas específicos</p>
                         <div class="current-topic">
-                            <strong>Tema Actual:</strong><br>
-                            Potenciación con números racionales
+                            <strong>Temas Disponibles:</strong><br>
+                            • Potenciación con números racionales<br>
+                            • Radicación de números racionales
                         </div>
                         <div class="micro-stats">
                             <span>10 preguntas • 15 minutos</span>
@@ -109,7 +172,7 @@
             <section id="micro-exam" class="section">
                 <div class="exam-container">
                     <div class="exam-header">
-                        <h2>🔬 Micro Examen: Potenciación con números racionales</h2>
+                        <h2>🔬 Micro Examen</h2>
                         <div class="exam-controls">
                             <div class="timer" id="micro-timer">15:00</div>
                             <div class="progress" id="micro-progress">0/10</div>
@@ -120,6 +183,24 @@
             </section>
         </main>
     </div>
+
+    <!-- Alert System -->
+    <div id="alert-overlay" class="alert-overlay">
+        <div class="alert-modal" id="alert-modal">
+            <div class="alert-header">
+                <div class="alert-icon" id="alert-icon">!</div>
+                <h3 class="alert-title" id="alert-title">Título</h3>
+            </div>
+            <div class="alert-message" id="alert-message">Mensaje</div>
+            <div class="alert-actions">
+                <button class="alert-btn secondary" id="alert-cancel">Cancelar</button>
+                <button class="alert-btn primary" id="alert-confirm">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
 
     <!-- Security Overlay -->
     <div id="security-overlay" class="security-overlay hidden">
@@ -132,6 +213,7 @@
 
     <!-- Scripts -->
     <script src="js/config.js"></script>
+    <script src="js/alerts.js"></script>
     <script src="js/security.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/questions.js"></script>

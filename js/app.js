@@ -1,92 +1,160 @@
 // Main Application Controller
 class App {
     constructor() {
+        console.log('🏗️ App constructor called');
         this.currentSection = 'landing';
         this.isInitialized = false;
+        console.log('🏗️ App constructor completed, calling init...');
         this.init();
     }
 
     async init() {
         try {
+            console.log('🔄 Init method called');
             // Wait for DOM to be ready
             if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', () => this.initialize());
+                console.log('⏳ DOM still loading, waiting...');
+                document.addEventListener('DOMContentLoaded', () => {
+                    console.log('📄 DOM loaded, calling initialize...');
+                    this.initialize();
+                });
             } else {
+                console.log('📄 DOM already ready, calling initialize...');
                 await this.initialize();
             }
         } catch (error) {
-            console.error('Error initializing app:', error);
-            this.showErrorMessage('Error al inicializar la aplicación');
+            console.error('❌ Error in init method:', error);
+            console.error('📍 Error message:', error.message);
+            console.error('📍 Error stack:', error.stack);
         }
     }
 
     async initialize() {
         try {
+            console.log('🚀 Starting initialization...');
+            
+            // Wait a bit for all scripts to load
+            await new Promise(resolve => setTimeout(resolve, 100));
+            console.log('✅ Scripts loading delay completed');
+            
+            // Check if required components exist
+            console.log('🔍 Checking required components...');
+            const requiredComponents = ['storageManager', 'securityManager', 'examManager', 'syllabusManager', 'questionGenerator', 'alertSystem'];
+            const missingComponents = requiredComponents.filter(comp => !window[comp]);
+            
+            if (missingComponents.length > 0) {
+                throw new Error(`Missing components: ${missingComponents.join(', ')}`);
+            }
+            console.log('✅ All required components found');
+            
             // Initialize storage
-            await storageManager.initDB();
+            console.log('💾 Initializing storage...');
+            await window.storageManager.initDB();
+            console.log('✅ Storage initialized successfully');
             
             // Setup navigation
+            console.log('🧭 Setting up navigation...');
             this.setupNavigation();
+            console.log('✅ Navigation setup completed');
             
             // Setup security
+            console.log('🔒 Setting up security...');
             this.setupSecurity();
+            console.log('✅ Security setup completed');
             
             // Load initial content
+            console.log('📄 Loading initial content...');
             this.loadInitialContent();
+            console.log('✅ Initial content loaded');
             
             // Setup keyboard shortcuts
+            console.log('⌨️ Setting up keyboard shortcuts...');
             this.setupKeyboardShortcuts();
+            console.log('✅ Keyboard shortcuts setup completed');
             
             // Setup window events
+            console.log('🪟 Setting up window events...');
             this.setupWindowEvents();
+            console.log('✅ Window events setup completed');
             
             this.isInitialized = true;
-            console.log('Beca 18 Platform initialized successfully');
+            console.log('🎉 Beca 18 Platform initialized successfully');
             
         } catch (error) {
-            console.error('Error during initialization:', error);
-            this.showErrorMessage('Error durante la inicialización');
+            console.error('❌ DETAILED ERROR during initialization:');
+            console.error('📍 Error message:', error.message);
+            console.error('📍 Error stack:', error.stack);
+            console.error('📍 Full error object:', error);
+            
+            // Show user-friendly error
+            if (window.alertSystem) {
+                window.alertSystem.error(`Error durante la inicialización: ${error.message}`);
+            } else {
+                alert(`Error durante la inicialización: ${error.message}`);
+            }
         }
     }
 
     setupNavigation() {
-        // Setup navigation buttons
-        const navButtons = document.querySelectorAll('.nav-btn');
-        navButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                const section = e.target.getAttribute('data-section');
-                if (section) {
-                    this.showSection(section);
-                }
+        try {
+            console.log('🧭 Starting navigation setup...');
+            
+            // Setup navigation buttons
+            const navButtons = document.querySelectorAll('.nav-btn');
+            console.log('🧭 Found nav buttons:', navButtons.length);
+            
+            navButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const section = e.target.getAttribute('data-section');
+                    if (section) {
+                        this.showSection(section);
+                    }
+                });
             });
-        });
+            console.log('🧭 Nav button listeners added');
 
-        // Setup section-specific initialization
-        this.sectionInitializers = {
-            'landing': () => this.initLandingSection(),
-            'syllabus': () => this.initSyllabusSection(),
-            'complete-exam': () => this.initCompleteExamSection(),
-            'micro-exam': () => this.initMicroExamSection()
-        };
+            // Setup section-specific initialization
+            this.sectionInitializers = {
+                'landing': () => this.initLandingSection(),
+                'syllabus': () => this.initSyllabusSection(),
+                'complete-exam': () => this.initCompleteExamSection(),
+                'micro-exam': () => this.initMicroExamSection()
+            };
+            console.log('🧭 Section initializers created:', Object.keys(this.sectionInitializers));
+            
+        } catch (error) {
+            console.error('❌ Error in setupNavigation:', error);
+            throw error;
+        }
     }
 
     setupSecurity() {
-        // Security is already initialized in security.js
-        // Add any additional security setup here
-        
-        // Monitor for suspicious activity during exams
-        document.addEventListener('keydown', (e) => {
-            if (currentExamState.isActive) {
-                this.handleExamKeyPress(e);
-            }
-        });
+        try {
+            console.log('🔒 Starting security setup...');
+            
+            // Security is already initialized in security.js
+            // Add any additional security setup here
+            
+            // Monitor for suspicious activity during exams
+            document.addEventListener('keydown', (e) => {
+                if (currentExamState.isActive) {
+                    this.handleExamKeyPress(e);
+                }
+            });
+            console.log('🔒 Keydown listener added');
 
-        // Handle visibility changes during exams
-        document.addEventListener('visibilitychange', () => {
-            if (currentExamState.isActive && document.hidden) {
-                this.handleExamFocusLoss();
-            }
-        });
+            // Handle visibility changes during exams
+            document.addEventListener('visibilitychange', () => {
+                if (currentExamState.isActive && document.hidden) {
+                    this.handleExamFocusLoss();
+                }
+            });
+            console.log('🔒 Visibility change listener added');
+            
+        } catch (error) {
+            console.error('❌ Error in setupSecurity:', error);
+            throw error;
+        }
     }
 
     setupKeyboardShortcuts() {
@@ -148,21 +216,70 @@ class App {
         });
     }
 
+    loadInitialContent() {
+        try {
+            console.log('📄 Starting loadInitialContent...');
+            
+            // Load initial section (landing by default)
+            const initialSection = window.location.hash.substring(1) || 'landing';
+            console.log('📄 Initial section determined:', initialSection);
+            
+            this.showSection(initialSection);
+            console.log('📄 Section shown successfully');
+            
+            // Initialize MathJax if available
+            console.log('📄 Attempting to render MathJax...');
+            this.renderMathJax().then(() => {
+                console.log('📄 MathJax rendering completed');
+            }).catch(err => {
+                console.warn('⚠️ MathJax rendering warning:', err);
+            });
+            
+            console.log('📄 Initial content loaded successfully');
+            
+        } catch (error) {
+            console.error('❌ Error in loadInitialContent:', error);
+            throw error;
+        }
+    }
+
     showSection(sectionId) {
-        // Don't allow navigation during active exam
-        if (currentExamState.isActive && sectionId !== this.currentSection) {
-            const confirmLeave = confirm('¿Estás seguro de que quieres salir del examen? Tu progreso se perderá.');
-            if (!confirmLeave) {
+        try {
+            console.log('🔄 showSection called with:', sectionId);
+            
+            // Don't allow navigation during active exam
+            if (currentExamState.isActive && sectionId !== this.currentSection) {
+                console.log('🔄 Exam is active, showing confirmation dialog...');
+                this.showConfirmDialog(
+                    '¿Estás seguro de que quieres salir del examen? Tu progreso se perderá.',
+                    'Confirmar salida del examen'
+                ).then(confirmed => {
+                    if (confirmed) {
+                        // End current exam
+                        if (window.examManager.timer) {
+                            clearInterval(window.examManager.timer);
+                        }
+                        window.securityManager.deactivateExamMode();
+                        currentExamState.isActive = false;
+                        this.performSectionChange(sectionId);
+                    }
+                });
                 return;
             }
-            // End current exam
-            if (examManager.timer) {
-                clearInterval(examManager.timer);
-            }
-            securityManager.deactivateExamMode();
-            currentExamState.isActive = false;
-        }
 
+            console.log('🔄 Proceeding with section change...');
+            this.performSectionChange(sectionId);
+            
+        } catch (error) {
+            console.error('❌ Error in showSection:', error);
+            console.error('📍 Section ID:', sectionId);
+            console.error('📍 Error details:', error.message);
+        }
+    }
+
+    performSectionChange(sectionId) {
+        console.log('Changing to section:', sectionId);
+        
         // Hide all sections
         document.querySelectorAll('.section').forEach(section => {
             section.classList.remove('active');
@@ -178,12 +295,24 @@ class App {
             this.updateNavigation(sectionId);
             
             // Initialize section if needed
-            if (this.sectionInitializers[sectionId]) {
-                this.sectionInitializers[sectionId]();
+            console.log('Available initializers:', Object.keys(this.sectionInitializers || {}));
+            console.log('Looking for initializer:', sectionId);
+            
+            if (this.sectionInitializers && this.sectionInitializers[sectionId]) {
+                try {
+                    console.log('Calling initializer for:', sectionId);
+                    this.sectionInitializers[sectionId]();
+                } catch (error) {
+                    console.error('Error initializing section:', sectionId, error);
+                }
+            } else {
+                console.log('No initializer found for:', sectionId);
             }
             
             // Update URL hash
             window.location.hash = sectionId;
+        } else {
+            console.error('Section not found:', sectionId);
         }
     }
 
@@ -198,28 +327,32 @@ class App {
 
     // Section Initializers
     initLandingSection() {
+        console.log('Initializing landing section');
         // Update statistics on landing page
         this.updateLandingStats();
     }
 
     initSyllabusSection() {
+        console.log('Initializing syllabus section');
         // Render syllabus
-        syllabusManager.renderSyllabus();
+        window.syllabusManager.renderSyllabus();
     }
 
     initCompleteExamSection() {
+        console.log('Initializing complete exam section');
         // Show exam start interface
         this.showExamStartInterface('complete');
     }
 
     initMicroExamSection() {
+        console.log('Initializing micro exam section');
         // Show exam start interface
         this.showExamStartInterface('micro');
     }
 
     async updateLandingStats() {
         try {
-            const stats = await storageManager.getExamStatistics();
+            const stats = await window.storageManager.getExamStatistics();
             
             // Update stats display if elements exist
             const statsElements = {
@@ -243,17 +376,41 @@ class App {
     }
 
     showExamStartInterface(examType) {
+        console.log('showExamStartInterface called with:', examType);
+        
         const contentElement = document.getElementById(`${examType === 'complete' ? 'complete' : 'micro'}-exam-content`);
+        console.log('Content element found:', !!contentElement);
+        
         if (!contentElement) return;
 
         const examConfig = examType === 'complete' ? CONFIG.COMPLETE_EXAM : CONFIG.MICRO_EXAM;
-        const examTitle = examType === 'complete' ? 'Examen Completo' : 'Micro Examen: Potenciación con números racionales';
-        const remainingAttempts = securityManager.getRemainingAttempts(examType);
+        const examTitle = examType === 'complete' ? 'Examen Completo' : 'Micro Examen';
+        const remainingAttempts = window.securityManager.getRemainingAttempts(examType);
 
-        const html = `
+        let html = `
             <div class="exam-start-interface">
                 <h2>🎯 ${examTitle}</h2>
-                
+        `;
+
+        if (examType === 'micro') {
+            html += `
+                <div class="theme-selection">
+                    <h3>📚 Selecciona el Microtema</h3>
+                    <div class="theme-options">
+                        <div class="theme-option" onclick="app.selectMicroTheme('potenciacion-racionales')">
+                            <div class="theme-title">Potenciación con números racionales</div>
+                            <div class="theme-description">Operaciones de potenciación con fracciones y exponentes</div>
+                        </div>
+                        <div class="theme-option" onclick="app.selectMicroTheme('radicacion-racionales')">
+                            <div class="theme-title">Radicación de números racionales</div>
+                            <div class="theme-description">Raíces, simplificación y racionalización</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        html += `
                 <div class="exam-info">
                     <div class="info-grid">
                         <div class="info-item">
@@ -293,7 +450,7 @@ class App {
 
                 <div class="exam-actions">
                     ${remainingAttempts > 0 ? `
-                        <button class="exam-btn primary" onclick="app.startExam('${examType}')">
+                        <button class="exam-btn primary" onclick="window.app.startExam('${examType}')">
                             🚀 Comenzar Examen
                         </button>
                     ` : `
@@ -302,7 +459,7 @@ class App {
                             <p>Podrás intentar nuevamente mañana.</p>
                         </div>
                     `}
-                    <button class="exam-btn secondary" onclick="app.showSection('landing')">
+                    <button class="exam-btn secondary" onclick="window.app.showSection('landing')">
                         ← Volver al Inicio
                     </button>
                 </div>
@@ -310,14 +467,56 @@ class App {
         `;
 
         contentElement.innerHTML = html;
+        console.log('Exam start interface rendered for:', examType);
     }
 
     startExam(examType) {
+        console.log('🚀 startExam called with:', examType);
+        
         if (examType === 'complete') {
-            examManager.startCompleteExam();
+            console.log('🚀 Starting complete exam...');
+            window.examManager.startCompleteExam();
         } else if (examType === 'micro') {
-            examManager.startMicroExam();
+            // For micro exams, we need theme selection first
+            console.log('🚀 Micro exam requires theme selection');
+            window.alertSystem.info('Por favor selecciona un microtema primero.');
         }
+    }
+
+    selectMicroTheme(microThemeId) {
+        console.log('Selecting micro theme:', microThemeId);
+        
+        const remainingAttempts = window.securityManager.getRemainingAttempts('micro');
+        console.log('Remaining attempts:', remainingAttempts);
+        
+        if (remainingAttempts <= 0) {
+            window.alertSystem.warning('Has agotado tus intentos diarios para Micro Exámenes. Podrás intentar nuevamente mañana.');
+            return;
+        }
+
+        const themeName = MICRO_THEMES_INFO[microThemeId]?.title || 'Tema desconocido';
+        console.log('Theme name:', themeName);
+        
+        window.alertSystem.showConfirm({
+            title: 'Confirmar Micro Examen',
+            message: `¿Deseas iniciar el micro examen de "${themeName}"?`,
+            confirmText: 'Iniciar Examen',
+            cancelText: 'Cancelar'
+        }).then(confirmed => {
+            console.log('Confirmation result:', confirmed);
+            if (confirmed) {
+                try {
+                    console.log('Starting micro exam with theme:', microThemeId);
+                    window.examManager.startMicroExam(microThemeId);
+                } catch (error) {
+                    console.error('Error starting micro exam:', error);
+                    window.alertSystem.error('Error al iniciar el examen. Por favor, recarga la página e intenta nuevamente.');
+                }
+            }
+        }).catch(error => {
+            console.error('Error in confirmation dialog:', error);
+            window.alertSystem.error('Error en el sistema de confirmación.');
+        });
     }
 
     handleExamKeyPress(e) {
@@ -332,7 +531,7 @@ class App {
         ];
 
         if (suspiciousKeys.includes(e.key)) {
-            securityManager.logSuspiciousActivity(`key_press_${e.key}`);
+            window.securityManager.logSuspiciousActivity(`key_press_${e.key}`);
         }
 
         suspiciousCombos.forEach(combo => {
@@ -340,16 +539,16 @@ class App {
                 e.shiftKey === combo.shift && 
                 e.altKey === (combo.alt || false) && 
                 e.key === combo.key) {
-                securityManager.logSuspiciousActivity(`key_combo_${combo.key}`);
+                window.securityManager.logSuspiciousActivity(`key_combo_${combo.key}`);
             }
         });
     }
 
     handleExamFocusLoss() {
-        securityManager.logSuspiciousActivity('exam_focus_loss');
+        window.securityManager.logSuspiciousActivity('exam_focus_loss');
         // Pause exam timer if implemented
-        if (examManager.pauseExam) {
-            examManager.pauseExam();
+        if (window.examManager.pauseExam) {
+            window.examManager.pauseExam();
         }
     }
 
@@ -360,30 +559,50 @@ class App {
     }
 
     showNotification(message, type = 'info') {
-        // Create notification element
-        const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.textContent = message;
-
-        // Add to page
-        document.body.appendChild(notification);
-
-        // Auto remove after 5 seconds
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 5000);
+        window.alertSystem.showToast(message, type);
     }
 
     showErrorMessage(message) {
-        this.showNotification(message, 'error');
+        window.alertSystem.error(message);
     }
 
-    // Data export/import functions
+    async showConfirmDialog(message, title = 'Confirmación') {
+        return await window.alertSystem.confirm(message, title);
+    }
+
+    // Helper method for safe MathJax rendering
+    renderMathJax() {
+        return new Promise((resolve) => {
+            try {
+                if (window.MathJax && window.MathJax.typesetPromise) {
+                    console.log('📐 Rendering MathJax with typesetPromise...');
+                    window.MathJax.typesetPromise().then(() => {
+                        console.log('📐 MathJax rendering completed');
+                        resolve();
+                    }).catch((err) => {
+                        console.warn('⚠️ MathJax rendering error:', err);
+                        resolve();
+                    });
+                } else if (window.MathJax && window.MathJax.Hub) {
+                    // Fallback for MathJax v2
+                    console.log('📐 Rendering MathJax with Hub.Queue...');
+                    window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub, () => {
+                        console.log('📐 MathJax v2 rendering completed');
+                        resolve();
+                    }]);
+                } else {
+                    console.log('📐 MathJax not available, skipping rendering');
+                    resolve();
+                }
+            } catch (error) {
+                console.warn('📐 Error in renderMathJax:', error);
+                resolve();
+            }
+        });
+    }
     async exportUserData() {
         try {
-            const data = await storageManager.exportData();
+            const data = await window.storageManager.exportData();
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             
@@ -407,7 +626,7 @@ class App {
             const text = await file.text();
             const data = JSON.parse(text);
             
-            await storageManager.importData(data);
+            await window.storageManager.importData(data);
             this.showNotification('Datos importados exitosamente', 'success');
             
             // Refresh current section
@@ -422,7 +641,7 @@ class App {
 }
 
 // Global app instance
-const app = new App();
+window.app = new App();
 
 // Global functions for HTML onclick handlers
 function showSection(sectionId) {

@@ -19,7 +19,7 @@ const CONFIG = {
     
     // Security Settings
     SECURITY: {
-        MAX_ATTEMPTS_PER_DAY: 3,
+        MAX_ATTEMPTS_PER_DAY: 50,
         TAB_SWITCH_WARNING: true,
         DISABLE_RIGHT_CLICK: true,
         DISABLE_TEXT_SELECTION: true,
@@ -166,6 +166,32 @@ const MICRO_THEMES_INFO = {
                 solution: '(3/4)^0 = 1'
             }
         ]
+    },
+    'radicacion-racionales': {
+        title: 'Radicación de números racionales',
+        description: 'Operaciones de radicación con números racionales, incluyendo simplificación y racionalización.',
+        explanation: `La radicación es la operación inversa de la potenciación. Para números racionales, aplicamos las propiedades:
+        √(a/b) = √a/√b, ⁿ√(a^m) = a^(m/n), y ⁿ√(ab) = ⁿ√a × ⁿ√b.
+        La racionalización consiste en eliminar radicales del denominador multiplicando por el conjugado o factor racionalizante apropiado.`,
+        formulas: [
+            '√(a/b) = √a/√b',
+            'ⁿ√(a^m) = a^(m/n)',
+            '1/√a = √a/a (racionalización)'
+        ],
+        examples: [
+            {
+                problem: 'Calcular √(9/16)',
+                solution: '√(9/16) = √9/√16 = 3/4'
+            },
+            {
+                problem: 'Racionalizar 1/√2',
+                solution: '1/√2 = 1/√2 × √2/√2 = √2/2'
+            },
+            {
+                problem: 'Simplificar ³√(8/27)',
+                solution: '³√(8/27) = ³√8/³√27 = 2/3'
+            }
+        ]
     }
 };
 
@@ -191,15 +217,17 @@ let securityState = {
     examStartTime: null
 };
 
-// MathJax Configuration
-window.MathJax = {
-    tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$', '$$'], ['\\[', '\\]']],
-        processEscapes: true,
-        processEnvironments: true
-    },
-    options: {
-        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
-    }
-};
+// MathJax Configuration (fallback if CDN fails)
+if (!window.MathJax) {
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true,
+            processEnvironments: true
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        }
+    };
+}

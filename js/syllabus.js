@@ -5,6 +5,23 @@ class SyllabusManager {
         this.currentExpandedMicro = null;
     }
 
+    // Helper method for safe MathJax rendering
+    renderMathJax() {
+        try {
+            if (window.app && typeof window.app.renderMathJax === 'function') {
+                return window.app.renderMathJax();
+            } else if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+                return window.this.renderMathJax();
+            } else {
+                console.log('MathJax not available or not ready');
+                return Promise.resolve();
+            }
+        } catch (error) {
+            console.warn('Error rendering MathJax in syllabus:', error);
+            return Promise.resolve();
+        }
+    }
+
     renderSyllabus() {
         const container = document.getElementById('syllabus-content');
         if (!container) return;
@@ -92,9 +109,18 @@ class SyllabusManager {
                 ${this.renderExamples(microThemeInfo.examples)}
             </div>
             
+            <div class="micro-exercises">
+                <h4>🎯 Micro Ejercicios de Práctica</h4>
+                <div class="exercise-container" id="exercise-${microThemeInfo.title.replace(/\s+/g, '-').toLowerCase()}">
+                    <button class="exercise-btn" onclick="syllabusManager.generateMicroExercise('${Object.keys(MICRO_THEMES_INFO).find(key => MICRO_THEMES_INFO[key].title === microThemeInfo.title)}')">
+                        Generar Ejercicio
+                    </button>
+                </div>
+            </div>
+            
             <div class="practice-link">
-                <button class="cta-button secondary" onclick="startMicroExam('${microThemeInfo.title}')">
-                    🎯 Practicar este tema
+                <button class="cta-button secondary" onclick="startMicroExam('${Object.keys(MICRO_THEMES_INFO).find(key => MICRO_THEMES_INFO[key].title === microThemeInfo.title)}')">
+                    🎯 Examen de este tema
                 </button>
             </div>
         `;
@@ -151,7 +177,7 @@ class SyllabusManager {
         
         // Re-render MathJax
         if (window.MathJax) {
-            MathJax.typesetPromise();
+            this.renderMathJax();
         }
     }
 
@@ -182,7 +208,7 @@ class SyllabusManager {
         
         // Re-render MathJax
         if (window.MathJax) {
-            MathJax.typesetPromise();
+            this.renderMathJax();
         }
     }
 
@@ -261,7 +287,7 @@ class SyllabusManager {
         
         // Re-render MathJax
         if (window.MathJax) {
-            MathJax.typesetPromise();
+            this.renderMathJax();
         }
     }
 
@@ -348,15 +374,199 @@ class SyllabusManager {
         }
     }
 
-    // Add progress indicators to syllabus (future enhancement)
-    addProgressIndicators() {
-        // This method would add visual progress indicators to each micro theme
-        // showing completion percentage, best score, etc.
+    // Generate micro exercise for syllabus section
+    generateMicroExercise(microThemeId) {
+        const container = document.getElementById(`exercise-${MICRO_THEMES_INFO[microThemeId].title.replace(/\s+/g, '-').toLowerCase()}`);
+        if (!container) return;
+
+        // Generate a practice question (different from exam questions)
+        let exercise;
+        if (microThemeId === 'potenciacion-racionales') {
+            exercise = this.generatePracticeExercise('potenciacion');
+        } else if (microThemeId === 'radicacion-racionales') {
+            exercise = this.generatePracticeExercise('radicacion');
+        } else {
+            exercise = this.generatePracticeExercise('potenciacion');
+        }
+
+        container.innerHTML = `
+            <div class="practice-exercise">
+                <div class="exercise-problem">
+                    <strong>Ejercicio:</strong> ${exercise.problem}
+                </div>
+                <div class="exercise-options">
+                    ${exercise.options.map((option, index) => `
+                        <button class="exercise-option" onclick="syllabusManager.checkExerciseAnswer('${exercise.id}', ${index}, '${exercise.correctAnswer}', '${exercise.explanation.replace(/'/g, "\\'")}')">
+                            ${String.fromCharCode(65 + index)}) ${option}
+                        </button>
+                    `).join('')}
+                </div>
+                <div class="exercise-feedback" id="feedback-${exercise.id}"></div>
+                <button class="exercise-btn secondary" onclick="syllabusManager.generateMicroExercise('${microThemeId}')">
+                    Nuevo Ejercicio
+                </button>
+            </div>
+        `;
+
+        // Re-render MathJax
+        if (window.MathJax) {
+            this.renderMathJax();
+        }
+    }
+
+    generatePracticeExercise(type) {
+        if (type === 'potenciacion') {
+            return this.generatePotenciacionPractice();
+        } else if (type === 'radicacion') {
+            return this.generateRadicacionPractice();
+        }
+    }
+
+    generatePotenciacionPractice() {
+        const exercises = [
+            {
+                problem: 'Evalúa: $(\\frac{1}{3})^2$',
+                options: ['1/9', '1/6', '2/3', '1/3'],
+                correctAnswer: '1/9',
+                explanation: 'Para elevar una fracción al cuadrado, elevamos tanto el numerador como el denominador: (1/3)² = 1²/3² = 1/9'
+            },
+            {
+                problem: 'Simplifica: $(\\frac{2}{5})^{-1}$',
+                options: ['5/2', '2/5', '-2/5', '1'],
+                correctAnswer: '5/2',
+                explanation: 'Un exponente negativo significa que debemos invertir la fracción: (2/5)⁻¹ = 1÷(2/5) = 5/2'
+            },
+            {
+                problem: 'Calcula: $(0.5)^3$',
+                options: ['0.125', '0.25', '1.5', '0.5'],
+                correctAnswer: '0.125',
+                explanation: 'Multiplicamos 0.5 tres veces: 0.5 × 0.5 × 0.5 = 0.125'
+            },
+            {
+                problem: 'Evalúa: $(\\frac{3}{4})^0$',
+                options: ['1', '0', '3/4', '4/3'],
+                correctAnswer: '1',
+                explanation: 'Cualquier número (excepto cero) elevado a la potencia 0 siempre es igual a 1'
+            },
+            {
+                problem: 'Calcula: $(\\frac{1}{2})^{-2}$',
+                options: ['4', '1/4', '-4', '2'],
+                correctAnswer: '4',
+                explanation: 'Exponente negativo invierte la fracción: (1/2)⁻² = (2/1)² = 2² = 4'
+            }
+        ];
+
+        const exercise = exercises[Math.floor(Math.random() * exercises.length)];
+        return {
+            id: Math.random().toString(36).substr(2, 9),
+            ...exercise
+        };
+    }
+
+    generateRadicacionPractice() {
+        const exercises = [
+            {
+                problem: 'Calcula: $\\sqrt{\\frac{4}{25}}$',
+                options: ['2/5', '4/25', '1/5', '2/25'],
+                correctAnswer: '2/5',
+                explanation: 'La raíz de una fracción es igual a la raíz del numerador dividida por la raíz del denominador: √(4/25) = √4/√25 = 2/5'
+            },
+            {
+                problem: 'Racionaliza: $\\frac{1}{\\sqrt{3}}$',
+                options: ['√3/3', '1/3', '√3', '3/√3'],
+                correctAnswer: '√3/3',
+                explanation: 'Para racionalizar, multiplicamos arriba y abajo por √3: (1/√3) × (√3/√3) = √3/3'
+            },
+            {
+                problem: 'Simplifica: $\\sqrt{18}$',
+                options: ['3√2', '2√3', '√18', '6'],
+                correctAnswer: '3√2',
+                explanation: 'Buscamos factores cuadrados perfectos: 18 = 9 × 2, entonces √18 = √(9×2) = √9 × √2 = 3√2'
+            },
+            {
+                problem: 'Calcula: $\\sqrt{\\frac{1}{4}}$',
+                options: ['1/2', '1/4', '2', '4'],
+                correctAnswer: '1/2',
+                explanation: 'La raíz cuadrada de 1/4 es: √(1/4) = √1/√4 = 1/2'
+            },
+            {
+                problem: 'Simplifica: $\\sqrt{50}$',
+                options: ['5√2', '2√5', '√50', '10'],
+                correctAnswer: '5√2',
+                explanation: 'Factorizamos: 50 = 25 × 2, entonces √50 = √(25×2) = √25 × √2 = 5√2'
+            }
+        ];
+
+        const exercise = exercises[Math.floor(Math.random() * exercises.length)];
+        return {
+            id: Math.random().toString(36).substr(2, 9),
+            ...exercise
+        };
+    }
+
+    checkExerciseAnswer(exerciseId, selectedIndex, correctAnswer, explanation) {
+        const feedbackElement = document.getElementById(`feedback-${exerciseId}`);
+        const options = document.querySelectorAll('.exercise-option');
+        
+        // Disable all options
+        options.forEach(option => option.disabled = true);
+        
+        // Get selected answer
+        const selectedOption = options[selectedIndex];
+        const selectedAnswer = selectedOption.textContent.substring(3); // Remove "A) " prefix
+        
+        // Check if correct
+        const isCorrect = selectedAnswer === correctAnswer;
+        
+        // Style the selected option
+        selectedOption.classList.add(isCorrect ? 'correct' : 'incorrect');
+        
+        // Highlight correct answer if wrong was selected
+        if (!isCorrect) {
+            options.forEach(option => {
+                if (option.textContent.substring(3) === correctAnswer) {
+                    option.classList.add('correct');
+                }
+            });
+        }
+        
+        // Clean explanation from any code-like content
+        const cleanExplanation = explanation
+            .replace(/Math input error/g, 'Error en la entrada matemática')
+            .replace(/sqrt/g, '√')
+            .replace(/times/g, '×')
+            .replace(/\\frac/g, '')
+            .replace(/\\sqrt/g, '√')
+            .replace(/\\times/g, '×')
+            .replace(/\{|\}/g, '')
+            .replace(/\\/g, '');
+        
+        // Show feedback
+        feedbackElement.innerHTML = `
+            <div class="feedback ${isCorrect ? 'success' : 'error'}">
+                <div class="feedback-result">
+                    ${isCorrect ? '✅ ¡Correcto! Excelente trabajo.' : '❌ Respuesta incorrecta'}
+                </div>
+                <div class="feedback-explanation">
+                    <strong>Explicación:</strong> ${cleanExplanation}
+                </div>
+                ${!isCorrect ? `
+                    <div class="feedback-tip">
+                        <strong>💡 Consejo:</strong> La respuesta correcta es <strong>${correctAnswer}</strong>. Revisa el procedimiento paso a paso.
+                    </div>
+                ` : ''}
+            </div>
+        `;
+        
+        // Re-render MathJax
+        if (window.MathJax) {
+            this.renderMathJax();
+        }
     }
 }
 
 // Global syllabus manager instance
-const syllabusManager = new SyllabusManager();
+window.syllabusManager = new SyllabusManager();
 
 // Global functions for syllabus interaction
 function startMicroExam(microThemeId) {

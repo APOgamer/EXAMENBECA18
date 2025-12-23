@@ -434,8 +434,146 @@
     font-size: 0.9rem;
 }
 
-/* Responsive Design for Components */
-@media (max-width: 768px) {
+/* Micro Exercises */
+.micro-exercises {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.exercise-container {
+    margin-top: 1rem;
+}
+
+.exercise-btn {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-size: 14px;
+}
+
+.exercise-btn:hover {
+    background: #2563eb;
+}
+
+.exercise-btn.secondary {
+    background: #6b7280;
+    margin-top: 1rem;
+}
+
+.exercise-btn.secondary:hover {
+    background: #4b5563;
+}
+
+.practice-exercise {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    margin-top: 1rem;
+}
+
+.exercise-problem {
+    font-size: 16px;
+    margin-bottom: 1rem;
+    color: #111827;
+    line-height: 1.5;
+}
+
+.exercise-options {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 1rem;
+}
+
+.exercise-option {
+    background: #f9fafb;
+    border: 1px solid #d1d5db;
+    padding: 12px 16px;
+    border-radius: 6px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-size: 14px;
+}
+
+.exercise-option:hover:not(:disabled) {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+.exercise-option:disabled {
+    cursor: not-allowed;
+}
+
+.exercise-option.correct {
+    background: #d1fae5;
+    border-color: #059669;
+    color: #065f46;
+}
+
+.exercise-option.incorrect {
+    background: #fee2e2;
+    border-color: #dc2626;
+    color: #991b1b;
+}
+
+.exercise-feedback {
+    margin-top: 1rem;
+}
+
+.feedback {
+    padding: 16px;
+    border-radius: 12px;
+    border-left: 4px solid;
+    margin-top: 16px;
+}
+
+.feedback.success {
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+    border-left-color: #10b981;
+    color: #065f46;
+}
+
+.feedback.error {
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
+    border-left-color: #ef4444;
+    color: #991b1b;
+}
+
+.feedback-result {
+    font-weight: 700;
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.feedback-explanation {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+
+.feedback-result {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.feedback-tip {
+    margin-top: 12px;
+    padding: 12px;
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+    border-radius: 8px;
+    border-left: 3px solid #3b82f6;
+    font-size: 14px;
+    color: #1e40af;
+}
     .exam-header {
         flex-direction: column;
         gap: 1rem;
@@ -465,5 +603,239 @@
     
     .macro-theme-title {
         font-size: 1.1rem;
+    }
+}
+/* Them
+e Selection */
+.theme-selection {
+    margin: 24px 0;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.theme-selection h3 {
+    color: #1f2937;
+    margin-bottom: 16px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.theme-options {
+    display: grid;
+    gap: 12px;
+}
+
+.theme-option {
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.theme-option:hover {
+    border-color: #3b82f6;
+    background: #f0f9ff;
+}
+
+.theme-option.selected {
+    border-color: #2563eb;
+    background: #dbeafe;
+}
+
+.theme-title {
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 4px;
+    font-size: 16px;
+}
+
+.theme-description {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Exam Start Interface */
+.exam-start-interface {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.info-item {
+    text-align: center;
+}
+
+.info-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2563eb;
+    display: block;
+}
+
+.info-label {
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+}
+
+.exam-instructions {
+    margin: 24px 0;
+    padding: 20px;
+    background: #f0f9ff;
+    border-radius: 8px;
+    border-left: 4px solid #3b82f6;
+}
+
+.exam-instructions h3 {
+    color: #1e40af;
+    margin-bottom: 12px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.exam-instructions ul {
+    margin: 0;
+    padding-left: 20px;
+    color: #1f2937;
+}
+
+.exam-instructions li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.security-notice {
+    margin: 24px 0;
+    padding: 20px;
+    background: #fef3c7;
+    border-radius: 8px;
+    border-left: 4px solid #f59e0b;
+}
+
+.security-notice h3 {
+    color: #92400e;
+    margin-bottom: 12px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.security-notice p {
+    color: #78350f;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.no-attempts-message {
+    text-align: center;
+    padding: 20px;
+    background: #fee2e2;
+    border-radius: 8px;
+    border: 1px solid #fecaca;
+    margin: 16px 0;
+}
+
+.no-attempts-message p {
+    color: #991b1b;
+    margin: 8px 0;
+    font-weight: 500;
+}
+
+/* Mathematical expressions */
+.math-expression {
+    font-family: 'Times New Roman', serif;
+    font-size: 1.1em;
+    font-weight: normal;
+}
+
+.fraction {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.fraction .numerator {
+    display: block;
+    border-bottom: 1px solid #333;
+    padding-bottom: 2px;
+}
+
+.fraction .denominator {
+    display: block;
+    padding-top: 2px;
+}
+
+.exponent {
+    vertical-align: super;
+    font-size: 0.8em;
+}
+
+.question-text {
+    font-size: 18px;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    color: #2d1b2e;
+    font-weight: 500;
+}
+
+.option-text {
+    font-size: 16px;
+    line-height: 1.6;
+}
+    .exam-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .exam-controls {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .options {
+        grid-template-columns: 1fr;
+    }
+    
+    .exam-actions {
+        flex-direction: column;
+    }
+    
+    .score-breakdown {
+        grid-template-columns: 1fr;
+    }
+    
+    .macro-theme-header {
+        padding: 1rem;
+    }
+    
+    .macro-theme-title {
+        font-size: 1.1rem;
+    }
+    
+    .theme-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .info-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }

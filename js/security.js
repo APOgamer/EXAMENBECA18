@@ -78,6 +78,7 @@ class SecurityManager {
         this.removeWatermark();
         this.hideSecurityIndicator();
         this.hideSecurityOverlay();
+        this.hideTabWarning();
         this.logSuspiciousActivity('exam_ended');
     }
 
@@ -402,7 +403,7 @@ class SecurityManager {
 }
 
 // Global security manager instance
-const securityManager = new SecurityManager();
+window.securityManager = new SecurityManager();
 
 // Global functions for security overlay
 function hideSecurityOverlay() {

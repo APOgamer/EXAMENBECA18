@@ -1,0 +1,21 @@
+{
+    "name": "Beca 18 - Plataforma Matemática",
+    "short_name": "Beca18Math",
+    "description": "Plataforma oficial de preparación matemática para Beca 18",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#fdf2f8",
+    "theme_color": "#db2777",
+    "icons": [
+        {
+            "src": "favicon-32x32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        },
+        {
+            "src": "apple-touch-icon.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        }
+    ]
+}
