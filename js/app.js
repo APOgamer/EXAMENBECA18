@@ -450,7 +450,7 @@ class App {
 
                 <div class="exam-actions">
                     ${remainingAttempts > 0 ? `
-                        <button class="exam-btn primary" onclick="window.app.startExam('${examType}')">
+                        <button class="exam-btn primary" onclick="${examType === 'complete' ? 'window.examManager.startCompleteExam()' : 'window.app.startExam(\'' + examType + '\')'}">
                             🚀 Comenzar Examen
                         </button>
                     ` : `

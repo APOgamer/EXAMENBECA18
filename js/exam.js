@@ -104,6 +104,9 @@ class ExamManager {
         const potenciacionQuestions = window.questionGenerator.generateMicroExamQuestions('potenciacion-racionales', 20);
         const radicacionQuestions = window.questionGenerator.generateMicroExamQuestions('radicacion-racionales', 20);
         
+        console.log('🎯 Potenciacion questions generated:', potenciacionQuestions.length);
+        console.log('🎯 Radicacion questions generated:', radicacionQuestions.length);
+        
         this.questions = [...potenciacionQuestions, ...radicacionQuestions];
         
         // Shuffle the combined questions
