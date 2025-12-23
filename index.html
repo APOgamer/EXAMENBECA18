@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beca 18 - Plataforma de Exámenes Matemáticos</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/security.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>Beca 18</h1>
+                    <span>Plataforma de Preparación Matemática</span>
+                </div>
+                <nav class="nav">
+                    <button class="nav-btn active" data-section="landing">Inicio</button>
+                    <button class="nav-btn" data-section="syllabus">Temario</button>
+                    <button class="nav-btn" data-section="complete-exam">Examen Completo</button>
+                    <button class="nav-btn" data-section="micro-exam">Micro Examen</button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Landing Section -->
+            <section id="landing" class="section active">
+                <div class="landing-grid">
+                    <!-- Temario Preview -->
+                    <div class="landing-card temario-card">
+                        <h2>📚 Temario General</h2>
+                        <p>Explora todos los macrotemas y microtemas del programa Beca 18</p>
+                        <div class="preview-list">
+                            <div class="preview-item">1️⃣ Números y Operaciones</div>
+                            <div class="preview-item">2️⃣ Álgebra</div>
+                            <div class="preview-item">3️⃣ Geometría</div>
+                            <div class="preview-item">4️⃣ Estadística y Probabilidad</div>
+                        </div>
+                        <button class="cta-button" onclick="showSection('syllabus')">Ver Temario Completo</button>
+                    </div>
+
+                    <!-- Examen Completo -->
+                    <div class="landing-card exam-card">
+                        <h2>🎯 Examen Completo</h2>
+                        <p>Evaluación integral de todos los macrotemas</p>
+                        <div class="exam-stats">
+                            <div class="stat">
+                                <span class="stat-number">40</span>
+                                <span class="stat-label">Preguntas</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">90</span>
+                                <span class="stat-label">Minutos</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">70%</span>
+                                <span class="stat-label">Para Aprobar</span>
+                            </div>
+                        </div>
+                        <button class="cta-button primary" onclick="showSection('complete-exam')">Iniciar Examen</button>
+                    </div>
+
+                    <!-- Micro Examen -->
+                    <div class="landing-card micro-card">
+                        <h2>🔬 Micro Examen</h2>
+                        <p>Práctica enfocada en microtemas específicos</p>
+                        <div class="current-topic">
+                            <strong>Tema Actual:</strong><br>
+                            Potenciación con números racionales
+                        </div>
+                        <div class="micro-stats">
+                            <span>10 preguntas • 15 minutos</span>
+                        </div>
+                        <button class="cta-button secondary" onclick="showSection('micro-exam')">Empezar Práctica</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Syllabus Section -->
+            <section id="syllabus" class="section">
+                <div class="syllabus-container">
+                    <h2>📚 Temario Completo</h2>
+                    <div id="syllabus-content"></div>
+                </div>
+            </section>
+
+            <!-- Complete Exam Section -->
+            <section id="complete-exam" class="section">
+                <div class="exam-container">
+                    <div class="exam-header">
+                        <h2>🎯 Examen Completo</h2>
+                        <div class="exam-controls">
+                            <div class="timer" id="complete-timer">90:00</div>
+                            <div class="progress" id="complete-progress">0/40</div>
+                        </div>
+                    </div>
+                    <div id="complete-exam-content"></div>
+                </div>
+            </section>
+
+            <!-- Micro Exam Section -->
+            <section id="micro-exam" class="section">
+                <div class="exam-container">
+                    <div class="exam-header">
+                        <h2>🔬 Micro Examen: Potenciación con números racionales</h2>
+                        <div class="exam-controls">
+                            <div class="timer" id="micro-timer">15:00</div>
+                            <div class="progress" id="micro-progress">0/10</div>
+                        </div>
+                    </div>
+                    <div id="micro-exam-content"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Security Overlay -->
+    <div id="security-overlay" class="security-overlay hidden">
+        <div class="security-message">
+            <h3>⚠️ Actividad Sospechosa Detectada</h3>
+            <p>Por favor, mantén el foco en la ventana del examen.</p>
+            <button onclick="hideSecurityOverlay()">Continuar</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/security.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/questions.js"></script>
+    <script src="js/syllabus.js"></script>
+    <script src="js/exam.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

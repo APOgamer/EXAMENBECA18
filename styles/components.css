@@ -1,0 +1,469 @@
+/* Syllabus Components */
+.syllabus-container {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    margin-top: 1rem;
+}
+
+.syllabus-container h2 {
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    text-align: center;
+}
+
+.macro-theme {
+    margin-bottom: 2rem;
+    border: 1px solid #ecf0f1;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.macro-theme:hover {
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.macro-theme-header {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    padding: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.macro-theme-header:hover {
+    background: linear-gradient(135deg, #2980b9, #1f4e79);
+}
+
+.macro-theme-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.expand-icon {
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.macro-theme.expanded .expand-icon {
+    transform: rotate(180deg);
+}
+
+.micro-themes {
+    display: none;
+    padding: 1rem;
+    background: #f8f9fa;
+}
+
+.macro-theme.expanded .micro-themes {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; max-height: 0; }
+    to { opacity: 1; max-height: 1000px; }
+}
+
+.micro-theme {
+    background: white;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.micro-theme:hover {
+    border-color: #3498db;
+    box-shadow: 0 2px 10px rgba(52, 152, 219, 0.1);
+}
+
+.micro-theme-header {
+    padding: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    transition: background 0.3s ease;
+}
+
+.micro-theme-header:hover {
+    background: #f8f9fa;
+}
+
+.micro-theme-title {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.micro-theme-content {
+    display: none;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+.micro-theme.expanded .micro-theme-content {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+.explanation {
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    color: #2c3e50;
+}
+
+.examples {
+    margin-top: 1.5rem;
+}
+
+.example {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border-left: 4px solid #27ae60;
+}
+
+.example-title {
+    font-weight: 600;
+    color: #27ae60;
+    margin-bottom: 0.5rem;
+}
+
+.example-problem {
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.example-solution {
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+/* Exam Components */
+.exam-container {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    margin-top: 1rem;
+}
+
+.exam-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #ecf0f1;
+}
+
+.exam-header h2 {
+    color: #2c3e50;
+    font-size: 1.8rem;
+}
+
+.exam-controls {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.timer {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.progress {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+}
+
+.question-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.question-card:hover {
+    border-color: #3498db;
+    box-shadow: 0 5px 20px rgba(52, 152, 219, 0.1);
+}
+
+.question-number {
+    background: #3498db;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.question-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+}
+
+.options {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.option {
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.option:hover {
+    border-color: #3498db;
+    background: #f0f8ff;
+}
+
+.option.selected {
+    border-color: #3498db;
+    background: #e3f2fd;
+    box-shadow: 0 2px 10px rgba(52, 152, 219, 0.2);
+}
+
+.option.correct {
+    border-color: #27ae60;
+    background: #e8f5e8;
+}
+
+.option.incorrect {
+    border-color: #e74c3c;
+    background: #fdf2f2;
+}
+
+.option-letter {
+    background: #3498db;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.option.selected .option-letter {
+    background: #2980b9;
+}
+
+.option.correct .option-letter {
+    background: #27ae60;
+}
+
+.option.incorrect .option-letter {
+    background: #e74c3c;
+}
+
+.numerical-input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.numerical-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.explanation-panel {
+    background: #e8f5e8;
+    border: 1px solid #27ae60;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    display: none;
+}
+
+.explanation-panel.show {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+.explanation-title {
+    color: #27ae60;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.explanation-text {
+    line-height: 1.6;
+    color: #2c3e50;
+}
+
+.exam-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.exam-btn {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.exam-btn.primary {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+}
+
+.exam-btn.primary:hover {
+    background: linear-gradient(135deg, #2980b9, #1f4e79);
+    transform: translateY(-2px);
+}
+
+.exam-btn.secondary {
+    background: #ecf0f1;
+    color: #2c3e50;
+    border: 2px solid #bdc3c7;
+}
+
+.exam-btn.secondary:hover {
+    background: #bdc3c7;
+    transform: translateY(-2px);
+}
+
+/* Results Panel */
+.results-panel {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.score-display {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.score-display.pass {
+    color: #27ae60;
+}
+
+.score-display.fail {
+    color: #e74c3c;
+}
+
+.score-message {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #2c3e50;
+}
+
+.score-breakdown {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.score-item {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+}
+
+.score-item-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #3498db;
+}
+
+.score-item-label {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+/* Responsive Design for Components */
+@media (max-width: 768px) {
+    .exam-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .exam-controls {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .options {
+        grid-template-columns: 1fr;
+    }
+    
+    .exam-actions {
+        flex-direction: column;
+    }
+    
+    .score-breakdown {
+        grid-template-columns: 1fr;
+    }
+    
+    .macro-theme-header {
+        padding: 1rem;
+    }
+    
+    .macro-theme-title {
+        font-size: 1.1rem;
+    }
+}
