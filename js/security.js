@@ -368,16 +368,36 @@ class SecurityManager {
     encryptAnswer(answer) {
         // Simple encryption using session-based key
         const sessionKey = this.getSessionKey();
-        return btoa(JSON.stringify({
+        // Convert to UTF-8 bytes first, then to base64 to handle special characters
+        const data = JSON.stringify({
             data: answer,
             key: sessionKey,
             timestamp: Date.now()
-        }));
+        });
+        
+        // Use TextEncoder to handle UTF-8 characters properly
+        const encoder = new TextEncoder();
+        const bytes = encoder.encode(data);
+        
+        // Convert bytes to base64
+        let binary = '';
+        bytes.forEach(byte => binary += String.fromCharCode(byte));
+        return btoa(binary);
     }
 
     decryptAnswer(encryptedAnswer) {
         try {
-            const decoded = JSON.parse(atob(encryptedAnswer));
+            // Decode from base64 to bytes, then to UTF-8 string
+            const binary = atob(encryptedAnswer);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+            
+            // Use TextDecoder to handle UTF-8 characters properly
+            const decoder = new TextDecoder();
+            const jsonString = decoder.decode(bytes);
+            const decoded = JSON.parse(jsonString);
             if (decoded.key === this.getSessionKey()) {
                 return decoded.data;
             }
